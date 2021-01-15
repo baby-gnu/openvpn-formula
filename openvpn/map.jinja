@@ -37,7 +37,14 @@
     ) %}
 
 {#- Load formula parameters values #}
-{%- set _formula_matchers = ["defaults.yaml"] + map_sources %}
+{%- set _formula_matchers =
+      [
+        "defaults.yaml",
+        "defaults.yaml.jinja",
+      ]
+      + map_sources
+      + ["post_map.yaml.jinja"] %}
+
 {%- set _formula_settings = mapstack(
       matchers=_formula_matchers,
       dirs=[formula_param_dir],

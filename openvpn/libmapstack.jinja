@@ -203,16 +203,15 @@
             | join("/") %}
 
 {%-         for yaml_name in yaml_names %}
-{#-           Make sure to have a `.yaml` extension #}
-{#-           Use `.rpartition` to strip last `.yaml` in `dir.yaml/file.yaml` #}
+{#-           Append a `.yaml` extension except if already present or for `.jinja` #}
+{%-           if yaml_name.rpartition(".")[2] not in ["yaml", "jinja"] %}
+{%-             set yaml_name = yaml_name ~ ".yaml" %}
+{%-           endif %}
+
 {%-           set yaml_filename = [
                 yaml_dir.rstrip("/"),
-                yaml_name.rpartition(".yaml")
-                | reject("equalto", ".yaml")
-                | join
-                ~ ".yaml"
+                yaml_name
               ]
-              | select
               | join("/") %}
 
 {%-           do salt["log.debug"](
